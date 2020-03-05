@@ -19,10 +19,16 @@ class App extends React.Component {
   }
 
   addBtnListener = () => {
-    const lastNum = this.state.clockIDs[this.state.clockIDs.length - 1];
-    const clockIds = this.state.clockIDs;
-    clockIds.push(lastNum + 1);
-    this.setState({ clockIDs: clockIds });
+    if (this.state.clockIDs.length === 0) {
+      const clockIds = this.state.clockIDs;
+      clockIds.push(1);
+      this.setState({ clockIDs: clockIds });
+    } else {
+      const lastNum = this.state.clockIDs[this.state.clockIDs.length - 1];
+      const clockIds = this.state.clockIDs;
+      clockIds.push(lastNum + 1);
+      this.setState({ clockIDs: clockIds });
+    }
   };
 
   removeBtnListener = () => {
@@ -35,6 +41,7 @@ class App extends React.Component {
     return this.state.clockIDs.map(id => {
       return (
         <Clock
+          removeFnc={this.removeBtnListener}
           key={uuid()}
           addBtnFnc={this.addBtnListener}
           date={this.state.date.toLocaleTimeString()}
@@ -48,8 +55,6 @@ class App extends React.Component {
       <div>
         {this.mappingFunc()}
         <AddButton addBtnFnc={this.addBtnListener}></AddButton>
-
-        <RemoveBtn removeFnc={this.removeBtnListener}></RemoveBtn>
       </div>
     );
   }
