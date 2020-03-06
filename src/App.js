@@ -2,7 +2,6 @@ import React from "react";
 import "./App.css";
 import Clock from "./Clock";
 import uuid from "react-uuid";
-import RemoveBtn from "./Buttons/RemoveButton";
 import AddButton from "./Buttons/AddButton";
 
 class App extends React.Component {
@@ -10,7 +9,9 @@ class App extends React.Component {
     super();
     this.state = {
       date: new Date(),
-      clockIDs: [1, 2]
+      clockIDs: [1, 2],
+      pressedId: null,
+      pressedIdArr: []
     };
   }
 
@@ -31,17 +32,19 @@ class App extends React.Component {
     }
   };
 
-  removeBtnListener = () => {
-    const clockIds = this.state.clockIDs;
-    clockIds.pop();
-    this.setState({ clockIDs: clockIds });
+  removeBtnListener = id => {
+    const pressedIdsArr = this.state.pressedIdArr;
+    pressedIdsArr.push(id);
+    this.setState({ pressedIdArr: pressedIdsArr });
   };
 
   mappingFunc = () => {
     return this.state.clockIDs.map(id => {
       return (
         <Clock
-          removeFnc={this.removeBtnListener}
+          id={id}
+          pressedArr={this.state.pressedIdArr}
+          removeFnc={() => this.removeBtnListener(id)}
           key={uuid()}
           addBtnFnc={this.addBtnListener}
           date={this.state.date.toLocaleTimeString()}
